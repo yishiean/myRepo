@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zen Home Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: a single washi-paper column, the TV mockup as the hero, then the phone, scenes, flows and sign-off list */
+:root{
+  --paper:#F3F0E8; --paper-2:#E9E4D8; --ink:#23262B; --ink-soft:#5E615F;
+  --line:#D5CFC0; --moss:#5B6B4E; --vermilion:#B4472F; --mist:#C9CFC6;
+  --tv-bezel:#16181A;
+  --display:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",Georgia,serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#1C1E1D; --paper-2:#252826; --ink:#ECE8DD; --ink-soft:#A7A99F;
+  --line:#3A3D39; --moss:#9CB08A; --vermilion:#E07A5F; --mist:#3B423C; --tv-bezel:#0B0C0C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1C1E1D; --paper-2:#252826; --ink:#ECE8DD; --ink-soft:#A7A99F;
+  --line:#3A3D39; --moss:#9CB08A; --vermilion:#E07A5F; --mist:#3B423C; --tv-bezel:#0B0C0C; color-scheme:dark}
+
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0;line-height:1.25}
+h1{font-size:clamp(30px,5vw,44px)}
+h2{font-size:24px;display:flex;align-items:baseline;gap:12px}
+h2 .jp{font-size:15px;color:var(--vermilion);font-weight:500}
+h3{font-size:17px}
+p{margin:0;max-width:65ch}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.lede{color:var(--ink-soft);font-size:16px}
+header{display:flex;flex-direction:column;gap:12px}
+.status{display:inline-flex;gap:8px;align-items:center;font-size:13px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;width:fit-content}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--vermilion);display:block}
+section{display:flex;flex-direction:column;gap:20px}
+
+/* TV mockup */
+.tv{background:var(--tv-bezel);border-radius:6px;padding:10px;max-width:100%;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+.screen{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;border-radius:2px;
+  background:linear-gradient(180deg,#E6E1D3 0%,#D9D6CB 55%,#C7CCC2 100%);color:#2A2C2A;font-family:var(--body)}
+.screen svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.clock{position:absolute;left:5%;top:7%;display:flex;flex-direction:column;gap:2px}
+.clock b{font-family:var(--display);font-weight:500;font-size:clamp(22px,5.4vw,52px);letter-spacing:.02em;line-height:1}
+.clock span{font-size:clamp(8px,1.3vw,13px);letter-spacing:.12em;color:#55594F}
+.season{position:absolute;right:5%;top:7%;writing-mode:vertical-rl;font-family:var(--display);font-size:clamp(10px,1.8vw,18px);color:#55594F;letter-spacing:.3em}
+.note{position:absolute;right:9%;bottom:30%;width:24%;background:#FBF8F0;padding:1.4% 1.6%;box-shadow:0 6px 14px -8px rgba(0,0,0,.35);transform:rotate(-1.2deg);border-top:3px solid #B4472F}
+.note small{display:block;font-size:clamp(6px,.95vw,10px);color:#7A7C74;letter-spacing:.08em}
+.note p{font-family:var(--display);font-size:clamp(8px,1.5vw,15px);line-height:1.4;color:#2A2C2A}
+.doodle{position:absolute;left:38%;top:24%;width:16%;opacity:.85}
+.dock{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);display:flex;gap:clamp(6px,1.4vw,14px)}
+.dock span{font-size:clamp(7px,1.15vw,12px);letter-spacing:.06em;padding:.55em 1.4em;border-radius:999px;background:rgba(251,248,240,.72);color:#2A2C2A;border:1px solid rgba(42,44,42,.12)}
+.dock span.on{background:#2A2C2A;color:#FBF8F0}
+.scene-tag{position:absolute;left:5%;bottom:7%;font-size:clamp(7px,1.05vw,11px);letter-spacing:.14em;color:#55594F}
+.callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.callouts div{display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:10px}
+.callouts b{font-size:14px}
+.callouts p{font-size:14px;color:var(--ink-soft)}
+
+/* Phone + scenes side by side */
+.split{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:720px){.split{grid-template-columns:1fr}}
+.phone{width:100%;max-width:300px;justify-self:center;background:var(--tv-bezel);border-radius:34px;padding:10px}
+.phone .in{background:#F7F4EC;border-radius:26px;padding:22px 16px 14px;display:flex;flex-direction:column;gap:14px;color:#2A2C2A;min-height:520px}
+.phone .top{display:flex;justify-content:space-between;align-items:baseline}
+.phone .top b{font-family:var(--display);font-size:20px}
+.phone .top span{font-size:11px;color:#6E7068}
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#E9E4D8;border-radius:10px;padding:4px}
+.ptabs span{text-align:center;font-size:11px;padding:6px 0;border-radius:7px}
+.ptabs span.on{background:#FBF8F0;font-weight:700}
+.scn{display:flex;flex-direction:column;gap:8px}
+.scn div{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:#FBF8F0;border:1px solid #E2DCCD;font-size:14px}
+.scn div.on{border-color:#5B6B4E;box-shadow:inset 3px 0 0 #5B6B4E}
+.scn em{font-style:normal;font-family:var(--display);color:#B4472F;font-size:13px}
+.compose{margin-top:auto;display:flex;gap:6px}
+.compose span{flex:1;font-size:12px;color:#8A8C84;border:1px solid #E2DCCD;background:#FBF8F0;border-radius:10px;padding:10px}
+.compose b{font-size:12px;background:#2A2C2A;color:#FBF8F0;border-radius:10px;padding:10px 12px}
+
+table{border-collapse:collapse;width:100%;font-size:14px}
+.tbl{overflow-x:auto}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+td .k{font-family:var(--display);color:var(--vermilion);margin-right:6px}
+
+/* Flows */
+.flows{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.flow{display:flex;flex-direction:column;gap:10px}
+.flow ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;color:var(--ink-soft);font-size:14px}
+
+/* Architecture */
+.arch{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.node{border:1px solid var(--line);background:var(--paper-2);border-radius:10px;padding:12px 16px;display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 180px}
+.node b{font-size:14px}.node span{font-size:13px;color:var(--ink-soft)}
+.arrow{color:var(--moss);font-size:20px}
+@media (max-width:620px){.arrow{transform:rotate(90deg);width:100%;text-align:center}}
+
+.limits{display:flex;flex-direction:column;gap:14px}
+.limit{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pill{font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 10px;height:fit-content;width:fit-content}
+.pill.ok{background:color-mix(in srgb,var(--moss) 18%,transparent);color:var(--moss)}
+.pill.verify{background:color-mix(in srgb,var(--vermilion) 15%,transparent);color:var(--vermilion)}
+.limit p{font-size:14px}
+@media (max-width:520px){.limit{grid-template-columns:1fr;gap:6px}}
+
+.signoff{background:var(--paper-2);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.signoff ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.signoff b{color:var(--ink)}
+.signoff .def{color:var(--ink-soft)}
+.changelog{font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:4px}
+:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <span class="eyebrow">UX spec · LG OLED55G4PSA · webOS 26</span>
+  <h1>Zen Home Hub</h1>
+  <p class="lede">You walk in, the TV is calm: a quiet landscape, the time, a note from home, and the three apps you actually use. Your phone runs the room.</p>
+  <span class="status"><i></i>v0.2 · Approved for phase 1 · wallpapers in progress</span>
+</header>
+
+<section>
+  <h2>On the TV <span class="jp">床の間</span></h2>
+  <div class="tv"><div class="screen" role="img" aria-label="Mockup of the TV home screen: misty mountain landscape, clock, a pinned note, a small doodle and an app dock with Netflix, YouTube and Disney Plus">
+    <svg class="bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <circle cx="1170" cy="250" r="95" fill="#D97F5F" opacity=".55"/>
+      <path d="M0 620 L180 520 L330 580 L520 430 L700 560 L860 470 L1040 590 L1250 460 L1420 560 L1600 500 L1600 900 L0 900Z" fill="#AEB7AA" opacity=".7"/>
+      <path d="M0 700 L220 610 L420 680 L640 590 L880 690 L1100 620 L1330 700 L1600 640 L1600 900 L0 900Z" fill="#8A9886" opacity=".75"/>
+      <path d="M0 790 L300 730 L620 790 L980 740 L1300 800 L1600 760 L1600 900 L0 900Z" fill="#5B6B4E" opacity=".8"/>
+    </svg>
+    <div class="clock"><b>19:42</b><span>TUE · 27 OCT · 29°C RAIN LATER</span></div>
+    <div class="season">秋・ただいま</div>
+    <svg class="doodle" viewBox="0 0 200 120" aria-hidden="true"><path d="M30 80 Q60 20 100 60 T170 50" fill="none" stroke="#2A2C2A" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="40" r="10" fill="none" stroke="#B4472F" stroke-width="4"/></svg>
+    <div class="note"><small>FROM CHEE CHUNG · 18:05</small><p>Dinner's in the fridge. Don't start the next episode without me.</p></div>
+    <div class="dock"><span class="on">Netflix</span><span>YouTube</span><span>Disney+</span></div>
+    <div class="scene-tag">SCENE · 夜 EVENING</div>
+  </div></div>
+  <div class="callouts">
+    <div><b>Wallpaper</b><p>Full-bleed photo or one of the built-in ink landscapes. A slow 60-second drift keeps it from looking static and protects the OLED.</p></div>
+    <div><b>Clock and weather</b><p>Large Mincho numerals, top left. Weather for Singapore in one line.</p></div>
+    <div><b>Note</b><p>The latest message, pinned like a paper slip. Fades after 12 hours unless you pin it.</p></div>
+    <div><b>Doodle</b><p>Ink strokes from the phone appear live, stroke by stroke, then settle onto the wallpaper.</p></div>
+    <div><b>App dock</b><p>Only Netflix, YouTube and Disney+. Left and right on the remote, OK to open.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>On your phone <span class="jp">手元</span></h2>
+  <div class="split">
+    <div class="phone" role="img" aria-label="Mockup of the phone controller showing the Scenes tab">
+      <div class="in">
+        <div class="top"><b>Home Hub</b><span>TV · on</span></div>
+        <div class="ptabs"><span class="on">Scenes</span><span>Note</span><span>Draw</span><span>Wall</span></div>
+        <div class="scn">
+          <div><span>Morning</span><em>朝</em></div>
+          <div class="on"><span>Evening</span><em>夜</em></div>
+          <div><span>Movie night</span><em>映画</em></div>
+          <div><span>Wind down</span><em>静</em></div>
+        </div>
+        <div class="compose"><span>Leave a note on the TV…</span><b>Send</b></div>
+      </div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Tab</th><th>What you do</th><th>What the TV does</th></tr></thead>
+        <tbody>
+          <tr><td>Scenes</td><td>Tap one scene</td><td>Changes wallpaper, brightness of the overlay, and which app is highlighted</td></tr>
+          <tr><td>Note</td><td>Type a line, send</td><td>Pins it as a paper slip with your name and time</td></tr>
+          <tr><td>Draw</td><td>Draw with a finger, pick ink or vermilion</td><td>Mirrors strokes live, then keeps the doodle until cleared</td></tr>
+          <tr><td>Wall</td><td>Pick a photo or a preset</td><td>Crossfades to the new wallpaper</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Scenes <span class="jp">場面</span></h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Scene</th><th>Wallpaper</th><th>Mood</th><th>Highlighted app</th></tr></thead>
+    <tbody>
+      <tr><td><span class="k">朝</span>Morning</td><td>Pale sky, mist</td><td>Bright, weather first</td><td>YouTube</td></tr>
+      <tr><td><span class="k">夜</span>Evening</td><td>Dusk mountains, red sun</td><td>Warm, note first</td><td>Netflix</td></tr>
+      <tr><td><span class="k">映画</span>Movie night</td><td>Near-black ink wash</td><td>Dim, clock hidden</td><td>Your pick, opens straight away (phase 2)</td></tr>
+      <tr><td><span class="k">静</span>Wind down</td><td>Moonlit garden</td><td>Very dim, slow drift</td><td>None</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Key moments <span class="jp">流れ</span></h2>
+  <div class="flows">
+    <div class="flow"><h3>Coming home</h3><ol><li>Press power.</li><li>The TV opens on Home Hub, not LG's home.</li><li>You see the evening scene and today's note.</li></ol></div>
+    <div class="flow"><h3>Leaving a note</h3><ol><li>Open Home Hub on your phone (saved to your home screen).</li><li>Note tab, type, Send.</li><li>It appears on the TV within about a second.</li></ol></div>
+    <div class="flow"><h3>Movie night</h3><ol><li>Tap Movie night on the phone.</li><li>The room dims and the TV switches to the ink-wash scene.</li><li>Press OK on Netflix, or the phone opens it for you (phase 2).</li></ol></div>
+  </div>
+</section>
+
+<section>
+  <h2>How it fits together <span class="jp">仕組み</span></h2>
+  <div class="arch">
+    <div class="node"><b>Phone controller</b><span>Web page saved to your home screen</span></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node"><b>Shared realtime database</b><span>Built and hosted in Lovable</span></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node"><b>TV display</b><span>Same app, TV view, running on the G4</span></div>
+  </div>
+  <p class="lede">Think of the database as the fridge door. Your phone puts magnets on it, and the TV is the door everyone looks at.</p>
+</section>
+
+<section>
+  <h2>What to know up front <span class="jp">注意</span></h2>
+  <div class="limits">
+    <div class="limit"><span class="pill verify">Limit</span><p><b>It sits on top of LG's home, it doesn't replace it.</b> Without rooting, Home Hub is an app. We make it feel like home by having it open first. Turning on Quick Start+ and turning off Home Auto Launch should make the TV resume Home Hub when you power it on. I need to test that on webOS 26.</p></div>
+    <div class="limit"><span class="pill ok">Phase 1</span><p><b>Runs in the TV's web browser.</b> Everything works, and you can be using it tonight. The app dock highlights the app, and you open it with the remote buttons (Netflix and Disney+ have their own buttons).</p></div>
+    <div class="limit"><span class="pill ok">Phase 2</span><p><b>Installed as a real TV app through LG Developer Mode.</b> No browser bar, and the dock and Movie night can open Netflix, YouTube and Disney+ directly. The trade-off: you tap Extend in the Developer Mode app every few weeks, or the app stops loading.</p></div>
+    <div class="limit"><span class="pill verify">Check</span><p><b>OLED care.</b> Static elements like the clock and dock drift a few pixels every minute, and the screen dims after 20 minutes idle. Pixel Refresher keeps doing its job as usual.</p></div>
+  </div>
+</section>
+
+<section class="signoff">
+  <h2>Decisions <span class="jp">決定</span></h2>
+  <ol>
+    <li><b>Who sends notes:</b> <span class="def">Yi Shiean and Chee Chung, with a 4-digit house PIN and no logins.</span></li>
+    <li><b>Names on notes:</b> <span class="def">set once on each phone.</span></li>
+    <li><b>Wallpapers:</b> <span class="def">live Three.js scenes, being chosen in the Zen Wallpaper Lab, plus your own photos.</span></li>
+    <li><b>Phase:</b> <span class="def">phase 1 first, in the TV's web browser.</span></li>
+  </ol>
+</section>
+
+<div class="changelog">
+  <span class="eyebrow">Changelog</span>
+  <span>v0.2 · 27 Oct 2026 · Locked users (Yi Shiean, Chee Chung), phase 1 first, wallpapers move to live Three.js scenes.</span>
+  <span>v0.1 · 27 Oct 2026 · First UX spec: wallpaper, notes, doodles, scene remote, three-app dock, Japanese Zen direction.</span>
+</div>
+</div>
+
+</body>
+</html>
